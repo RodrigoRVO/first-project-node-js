@@ -25,19 +25,24 @@ const checkUserId = (request, response, next) => {
     next()
 } 
 
+const checkRoute = (request, response, next) => {
+    console.log(request.method)
+    console.log(request.url)
+
+    next()
+}
 
 
 
 
-
-app.get('/order', (request, response) => {
+app.get('/order', checkRoute, (request, response) => {
     
     return response.json(orders)
 })
 
 
 
-app.post('/order', (request, response) => {
+app.post('/order', checkRoute, (request, response) => {
     const {order, clientName, price} = request.body
 
     const status = 'Em preparação...'
@@ -51,7 +56,7 @@ app.post('/order', (request, response) => {
 
 
 
-app.put('/order/:id', checkUserId, (request, response) => {
+app.put('/order/:id',checkRoute, checkUserId, (request, response) => {
     const index = request.orderIndex
     const id = request.orderId
     const status = 'Em preparação...'
@@ -68,7 +73,7 @@ app.put('/order/:id', checkUserId, (request, response) => {
 
 
 
-app.delete('/order/:id', checkUserId, (request, response) => {
+app.delete('/order/:id', checkRoute, checkUserId, (request, response) => {
     
     const index = request.orderIndex
 
@@ -80,7 +85,7 @@ app.delete('/order/:id', checkUserId, (request, response) => {
 
 
 
-app.get('/order/:id', checkUserId, (request, response) => {
+app.get('/order/:id', checkRoute, checkUserId, (request, response) => {
     const index = request.orderIndex
 
     const clientOrder = orders[index]
@@ -92,7 +97,7 @@ app.get('/order/:id', checkUserId, (request, response) => {
 
 
 
-app.patch('/order/:id', checkUserId, (request, response) => {
+app.patch('/order/:id', checkRoute, checkUserId, (request, response) => {
     const id = request.orderId
 
     const {order, clientName, price} = request.body
